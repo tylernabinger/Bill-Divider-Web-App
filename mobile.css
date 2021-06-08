@@ -1,0 +1,52 @@
+input {
+  width: 80%;
+  margin: 5%;
+  font-size: 25px;
+}
+div {
+  font-size: 30px;
+}
+.name-and-cost {
+  width: 35%;
+  margin: 3%;
+}
+::placeholder {
+  font-size: 10px;
+}
+.hide {
+  display: none;
+}
+.inline {
+  display: inline-block;
+}
+.num-people-error-message {
+  border: 0.5px solid;
+  width: 95%;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  background-color: #ADD8E6;
+}
+.numPeopleButton {
+  display: inline-block;
+  border: 0.5px solid;
+  margin: 5px;
+  padding: 5px;
+  background-color: #ADD8E6;
+  font-family: "Monaco";
+}
+.container {
+  height: 2000px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: "Monaco";
+  background-color: #E0FFFF;
+}
+.home-title {
+  font-family: "Monaco";
+  font-size: 40px;
+}
+.calc-error-message {
+  margin-bottom: 50px;
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bill Divider</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="https://icon-library.com/images/dollar-sign-icon-png/dollar-sign-icon-png-27.jpg"
+    />
+    <link
+      rel="stylesheet"
+      media="only screen and (max-width: 510px)"
+      href="mobile.css"
+    />
+    <link
+      rel="stylesheet"
+      media="only screen and (min-width: 511px)"
+      href="desktop.css"
+    />
+    <style></style>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="home-title">BILL DIVIDER</div>
+      <form method="POST" action="">
+        <label for="numberOfPeople">Number of people:</label>
+        <input type="text" name="numPeople" id="numPeople" />
+        <input class="numPeopleButton" type="submit" value="Submit" />
+      </form>
+    </div>
+    <div class="game"></div>
+    <script>
+      function main() {
+        const container = document.querySelector(".container");
+        const numPeopleButton = document.querySelector(".numPeopleButton");
+        numPeopleButton.addEventListener("click", function(evt) {
+          evt.preventDefault(); // Stop form from making a POST request
+          const numPeopleString = document.querySelector("#numPeople").value;
+          let numPeopleError = "Undefined";
+          let numPeople = 0;
+          if (!isNaN(numPeopleString)) {
+            if (numPeopleString <= 0) {
+              numPeopleError = "Please enter an integer above 0";
+            } else if (numPeopleString % 1 == 0) {
+              numPeople = Number.parseInt(numPeopleString);
+            } else {
+              numPeopleError = "Please enter an integer";
+            }
+          } else {
+            numPeopleError = "Please enter a number";
+          }
+          if (numPeopleError !== "Undefined") {
+            const currentErrorMessage = document.querySelector(
+              ".num-people-error-message"
+            );
+            if (currentErrorMessage) {
+              currentErrorMessage.textContent = numPeopleError;
+            } else {
+              const numPeopleErrorMessage = document.createElement("div");
+              numPeopleErrorMessage.classList.add("num-people-error-message");
+              numPeopleErrorMessage.textContent = numPeopleError;
+              container.appendChild(numPeopleErrorMessage);
+            }
+          } else {
+            // Proceed
+            document.querySelector(".numPeopleButton").classList.add("hide");
+            document
+              .querySelector(".numPeopleButton")
+              .classList.toggle("numPeopleButton");
+            const currentErrorMessage = document.querySelector(
+              ".num-people-error-message"
+            );
+            if (currentErrorMessage) {
+              currentErrorMessage.classList.add("hide");
+            }
+            for (let i = 0; i < numPeople; i++) {
+              const person = document.createElement("div");
+              person.setAttribute("id", i + 1);
+              const name = document.createElement("input");
+              name.setAttribute("type", "text");
+              name.setAttribute("name", "name");
+              name.setAttribute(
+                "placeholder",
+                `Enter Person ${i + 1}'s name here`
+              );
+              name.setAttribute("id", `name${i + 1}`);
+              name.classList.add("name-and-cost");
+              name.classList.add("inline");
+              person.appendChild(name);
+              const items = document.createElement("input");
+              items.setAttribute("type", "text");
+              items.setAttribute("items", "items");
+              items.setAttribute(
+                "placeholder",
+                "Enter total cost of their items"
+              );
+              items.setAttribute("id", `items${i + 1}`);
+              items.classList.add("items");
+              items.classList.add("name-and-cost");
+              items.classList.add("inline");
+              person.appendChild(items);
+              container.appendChild(person);
+            }
+
+            const subtotalLabel = document.createElement("div");
+            subtotalLabel.textContent = "Subtotal:";
+            subtotalLabel.classList.add("inline");
+            container.appendChild(subtotalLabel);
+            const subtotal = document.createElement("input");
+            subtotal.setAttribute("type", "number");
+            subtotal.setAttribute("subtotal", "subtotal");
+            subtotal.setAttribute("placeholder", "Subtotal from your check");
+            subtotal.setAttribute("id", "subtotal");
+            subtotal.classList.add("inline");
+            container.appendChild(subtotal);
+            const lineBreak1 = document.createElement("br");
+            container.appendChild(lineBreak1);
+            const taxLabel = document.createElement("div");
+            taxLabel.textContent = "Tax:";
+            taxLabel.classList.add("inline");
+            container.appendChild(taxLabel);
+            const tax = document.createElement("input");
+            tax.setAttribute("type", "number");
+            tax.setAttribute("tax", "tax");
+            tax.setAttribute("placeholder", "Tax from your check");
+            tax.setAttribute("id", "tax");
+            tax.classList.add("inline");
+            container.appendChild(tax);
+            const lineBreak2 = document.createElement("br");
+            container.appendChild(lineBreak2);
+            const tipLabel = document.createElement("div");
+            tipLabel.textContent = "Tip Percentage:";
+            tipLabel.classList.add("inline");
+            container.appendChild(tipLabel);
+            const tip = document.createElement("input");
+            tip.setAttribute("type", "number");
+            tip.setAttribute("tip", "tip");
+            tip.setAttribute("placeholder", "Suggested tip between 15-25");
+            tip.setAttribute("id", "tip");
+            tip.classList.add("inline");
+            container.appendChild(tip);
+            const lineBreak3 = document.createElement("br");
+            container.appendChild(lineBreak3);
+            const calculateButton = document.createElement("input");
+            calculateButton.classList.add("numPeopleButton");
+            calculateButton.setAttribute("id", "calculate");
+            calculateButton.setAttribute("type", "submit");
+            calculateButton.setAttribute("value", "Calculate");
+            container.appendChild(calculateButton);
+          }
+          const calculate = document.querySelector("#calculate");
+          calculate.addEventListener("click", function(evt) {
+            const subtotalFloat = Number.parseFloat(
+              document.querySelector("#subtotal").value
+            );
+            // Check to confirm that all the items entered above add up to the subtotal
+            let tally = 0;
+            const allItems = document.querySelectorAll(".items");
+            for (let k = 0; k < allItems.length; k++) {
+              tally += Number.parseFloat(allItems[k].value);
+            }
+            tally = tally.toFixed(2);
+            console.log("Tally: $", tally);
+            console.log("Subtotal: $", subtotalFloat);
+            if (tally == subtotalFloat) {
+              const calcError = document.querySelector(".calc-error-message");
+              if (calcError) {
+                calcError.classList.add("hide");
+              }
+              const taxFloat = Number.parseFloat(
+                document.querySelector("#tax").value
+              );
+              let tipFloat =
+                (Number.parseFloat(document.querySelector("#tip").value) /
+                  100) *
+                subtotalFloat;
+              let total = subtotalFloat + taxFloat + tipFloat;
+              tipFloat = tipFloat.toFixed(2);
+              total = Number.parseFloat(total).toFixed(2);
+              console.log("Tip: ", tipFloat);
+              console.log("Total: ", total);
+              const tipReport = document.createElement("div");
+              tipReport.textContent = "Tip: $" + tipFloat;
+              container.appendChild(tipReport);
+              const totalReport = document.createElement("div");
+              totalReport.textContent = "Total: $" + total;
+              container.appendChild(totalReport);
+
+              for (let j = 1; j < numPeople + 1; j++) {
+                const percent =
+                  Number.parseFloat(
+                    document.querySelector(`#items${j}`).value
+                  ) / subtotalFloat;
+                const owed = (percent * total).toFixed(2);
+                const personName = document.querySelector(`#name${j}`).value;
+                const personReport = document.createElement("div");
+                personReport.textContent = `${personName} owes $${owed}`;
+                container.appendChild(personReport);
+              }
+            } else {
+              const currentErr = document.querySelector(".calc-error-message");
+              if (currentErr) {
+                currentErr.textContent =
+                  "The items for each person do not sum to the subtotal from your check. Double check your numbers and try again.";
+              } else {
+                const calcErrMessage = document.createElement("div");
+                calcErrMessage.classList.add("calc-error-message");
+                calcErrMessage.textContent =
+                  "The items for each person do not sum to the subtotal from your check. Double check your numbers and try again.";
+                container.appendChild(calcErrMessage);
+              }
+            }
+          });
+        });
+      }
+      document.addEventListener("DOMContentLoaded", main);
+    </script>
+  </body>
+</html>
